@@ -28,7 +28,10 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 class Greeter(helloworld_pb2_grpc.GreeterServicer):
 
     def SayHello(self, request, context):
-        return helloworld_pb2.HelloReply(message='Hello, %s!' % request.name)
+        if request.name == 'ERROR':
+            context.abort(grpc.StatusCode.FAILED_PRECONDITION, "move along!")
+        else:
+            return helloworld_pb2.HelloReply(message='Hello, %s!' % request.name)
 
 
 def serve():
